@@ -1,0 +1,15 @@
+version: 2
+
+sources:
+  - name: thelook_ecommerce
+    database: bigquery-public-data
+    schema: thelook_ecommerce
+    tables:
+      - name: orders
+        description: "Registo transacional de encomendas efetuadas no e-commerce."
+      - name: order_items
+        description: "Itens individuais pertencentes a cada encomenda com valores monetários e status."
+      - name: products
+        description: "Catálogo de produtos com categorias, custos e marcas."
+      - name: users
+        description: "Dados cadastrais e geográficos dos clientes."
