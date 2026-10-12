@@ -1,0 +1,69 @@
+version: 2
+
+models:
+  - name: stg_orders
+    description: "Tabela de staging contendo pedidos limpos e padronizados do TheLook."
+    columns:
+      - name: order_id
+        description: "Chave primária do pedido."
+        data_tests:
+          - unique
+          - not_null
+
+      - name: customer_id
+        description: "Chave estrangeira referenciando o cliente."
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_users')
+                field: customer_id
+
+      - name: order_status
+        description: "Status atual do pedido."
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['Complete', 'Pending', 'Cancelled', 'Processing', 'Returned', 'Shipped']
+
+  - name: stg_order_items
+    description: "Tabela de staging com itens individuais de cada pedido."
+    columns:
+      - name: order_item_id
+        description: "Chave primária do item de pedido."
+        data_tests:
+          - unique
+          - not_null
+
+      - name: order_id
+        description: "Chave estrangeira do pedido."
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_orders')
+                field: order_id
+
+      - name: sale_price
+        description: "Valor de venda unitário do item."
+        data_tests:
+          - not_null
+
+  - name: stg_products
+    description: "Catálogo de produtos higienizado."
+    columns:
+      - name: product_id
+        description: "Chave primária do produto."
+        data_tests:
+          - unique
+          - not_null
+
+  - name: stg_users
+    description: "Base de utilizadores e clientes padronizada."
+    columns:
+      - name: customer_id
+        description: "Chave primária do cliente."
+        data_tests:
+          - unique
+          - not_null

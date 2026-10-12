@@ -1,0 +1,42 @@
+version: 2
+
+models:
+  - name: fct_orders
+    description: "Tabela fato de pedidos com agregações financeiras e operacionais a nível de pedido."
+    columns:
+      - name: order_id
+        description: "Chave primária do pedido."
+        data_tests:
+          - unique
+          - not_null
+
+      - name: customer_id
+        description: "Chave estrangeira do cliente que realizou a compra."
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_customers')
+                field: customer_id
+
+      - name: total_order_amount
+        description: "Valor financeiro total faturado no pedido."
+        data_tests:
+          - not_null
+
+  - name: dim_customers
+    description: "Dimensão de clientes enriquecida com métricas de LTV e histórico de pedidos."
+    columns:
+      - name: customer_id
+        description: "Chave primária do cliente."
+        data_tests:
+          - unique
+          - not_null
+
+      - name: customer_segment
+        description: "Segmentação comportamental do cliente baseada no histórico de compras."
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['Never Purchased', 'One-Time Buyer', 'Repeat Buyer']
